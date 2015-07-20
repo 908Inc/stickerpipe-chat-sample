@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/material_8"
+                android:paddingRight="@dimen/material_40"
+                android:paddingTop="4dp">
+
+    <ImageView
+        android:layout_width="@dimen/avatar_size"
+        android:layout_height="@dimen/avatar_size"
+        android:src="@drawable/dad_ava"
+        android:id="@+id/avatar"/>
+
+    <TextView
+        android:id="@+id/chat_item_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/material_40"
+        android:background="@drawable/chat_item_bg_in"
+        android:layout_centerVertical="true"
+        android:paddingBottom="@dimen/material_8"
+        android:paddingLeft="@dimen/material_16"
+        android:paddingRight="@dimen/material_16"
+        android:paddingTop="@dimen/material_8"
+        android:textColor="@color/chat_item_text"
+        android:textSize="@dimen/text_14"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/material_48"/>
+
+    <TextView
+        android:id="@+id/chat_item_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:text="Today, 9.18"
+        android:textColor="@color/chat_item_text"
+        android:textSize="@dimen/text_12"
+        android:layout_below="@+id/chat_item_message"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:layout_marginLeft="@dimen/material_48"/>
+
+</RelativeLayout>

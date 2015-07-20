@@ -1,0 +1,27 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="vc.s908.stickerpipe_chat_sample">
+
+    <application android:allowBackup="true"
+                 android:label="@string/app_name"
+                 android:icon="@drawable/ic_launcher"
+                 android:theme="@style/AppTheme"
+                 android:name=".App">
+        <activity
+            android:name=".ui.MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="vc908.stickerfactory.provider.StickersProvider"
+            android:authorities="vc.s908.stickerpipe_chat_sample.stickersProvider"
+            android:exported="false"/>
+
+    </application>
+
+
+</manifest>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingLeft="@dimen/material_40"
+                android:paddingRight="@dimen/material_16"
+                android:gravity="right"
+                android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/chat_item_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/chat_item_bg_out"
+        android:paddingBottom="@dimen/material_8"
+        android:paddingLeft="@dimen/material_16"
+        android:paddingRight="@dimen/material_16"
+        android:paddingTop="@dimen/material_8"
+        android:layout_alignParentRight="true"
+        android:textSize="@dimen/text_14"
+        android:textColor="@color/chat_item_text"/>
+
+    <TextView
+        android:id="@+id/chat_item_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/chat_item_message"
+        android:text="Today, 9.18"
+        android:gravity="right"
+        android:textSize="@dimen/text_12"
+        android:layout_alignParentRight="true"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:textColor="@color/chat_item_text"/>
+
+</RelativeLayout>
