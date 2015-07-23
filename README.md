@@ -5,7 +5,9 @@ This sample demonstrates how to add stickers to your chat.
 
 ![android](sample.gif)
 
-## Instalation 
+## Instalation
+If you use Eclipse IDE - follow [this instructions](https://github.com/908Inc/stickerpipe-android-sdk-for-eclipse).
+
 Add stickers repository in build.gradle:
 ```android
 repositories {
