@@ -21,7 +21,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,8 +35,10 @@ import vc.s908.stickerpipe_chat_sample.manager.StorageManager;
 import vc908.stickerfactory.StickersManager;
 import vc908.stickerfactory.ui.OnEmojiBackspaceClickListener;
 import vc908.stickerfactory.ui.OnStickerSelectedListener;
+import vc908.stickerfactory.ui.activity.PackInfoActivity;
 import vc908.stickerfactory.ui.fragment.StickersFragment;
 import vc908.stickerfactory.ui.view.KeyboardHandleRelativeLayout;
+import vc908.stickerfactory.ui.view.MarkedImageView;
 import vc908.stickerfactory.utils.KeyboardUtils;
 
 
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
     private static final String STICKERS_FRAME_STATE = "stickers_frame_state";
     private KeyboardHandleRelativeLayout keyboardHandleLayout;
     private View chatContentGroup;
-    private ImageButton stickerButton;
+    private ImageView stickerButton;
     private boolean isStickerUsed;
     private View tryStickersView;
     private PaletteDialog paletteDialog;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
     private boolean isBotJobRunning;
     private Random random = new Random();
     private int primaryLightColor;
+    private int primaryColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
         if (savedInstanceState != null) {
             isStickersFrameVisible = savedInstanceState.getBoolean(STICKERS_FRAME_STATE);
         }
-        int primaryColor = StorageManager.getInstance(this).getPrimaryColor();
+        primaryColor = StorageManager.getInstance(this).getPrimaryColor();
         primaryLightColor = StorageManager.getInstance(this).getPrimaryLightColor();
         int primaryDarkColor = StorageManager.getInstance(this).getPrimaryDarkColor();
 
@@ -132,7 +134,9 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
             }
         });
         setStickersFrameVisible(isStickersFrameVisible);
-        stickerButton = (ImageButton) findViewById(R.id.stickers_btn);
+        MarkedImageView markedImageView = ((MarkedImageView) findViewById(R.id.stickers_btn));
+        markedImageView.setMarkerColors(android.R.color.white, R.color.red_500, android.R.color.white);
+        stickerButton = markedImageView.getImageView();
         stickerButton.setColorFilter(getResources().getColor(primaryColor));
         stickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
     @Override
     protected void onStart() {
         super.onStart();
-        if(!isBotJobRunning){
+        if (!isBotJobRunning) {
             switchBotJob(false);
         }
     }
@@ -248,6 +252,7 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
         addMessage("...", false, yesterdayTime + 10 * 1000);
 //        addMessage("[[pinkgorilla_hm]]", false, yesterdayTime + 30 * 1000);
 //        addMessage("[[mems_sadness]]", true, yesterdayTime + 100 * 1000);
+        addMessage("[[flowers_flower1]]", true, yesterdayTime + 100 * 1000);
     }
 
     private void showKeyboard() {
@@ -305,6 +310,8 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
 
 
     private class ChatAdapter extends BaseAdapter {
+
+        private Drawable downloadBgDrawable;
 
         @Override
         public int getCount() {
@@ -375,6 +382,21 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
                 case STICKER_IN:
                 case STICKER_OUT:
                     loadSticker(vh.messageSticker, item.getMessage());
+                    vh.stickerCode = item.getMessage();
+                    if (vh.downloadImage != null) {
+                        if (StickersManager.isPackAtUserLibrary(item.getMessage())) {
+                            vh.downloadImage.setVisibility(View.GONE);
+                        } else {
+                            if (downloadBgDrawable == null) {
+                                downloadBgDrawable = getResources().getDrawable(R.drawable.download_pack_bg);
+                            }
+                            if (downloadBgDrawable != null) {
+                                downloadBgDrawable.setColorFilter(getResources().getColor(primaryColor), PorterDuff.Mode.SRC_IN);
+                                vh.downloadImage.setBackgroundDrawable(downloadBgDrawable);
+                            }
+                            vh.downloadImage.setVisibility(View.VISIBLE);
+                        }
+                    }
                     break;
                 default:
                     throw new RuntimeException("Unknown item type");
@@ -443,9 +465,11 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
         }
 
         private class ViewHolder {
+            String stickerCode;
             TextView messageView;
             TextView timeView;
             ImageView messageSticker;
+            View downloadImage;
             View avatar;
         }
 
@@ -457,11 +481,23 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
                 layoutId = R.layout.list_item_sticker_out;
             }
             View view = getLayoutInflater().inflate(layoutId, parent, false);
-            ViewHolder vh = new ViewHolder();
+            final ViewHolder vh = new ViewHolder();
             vh.messageSticker = (ImageView) view.findViewById(R.id.chat_item_sticker);
             vh.timeView = (TextView) view.findViewById(R.id.chat_item_time);
             vh.avatar = view.findViewById(R.id.avatar);
+            vh.downloadImage = view.findViewById(R.id.download_icon);
             view.setTag(vh);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new PackInfoActivity.Builder(MainActivity.this)
+                            .setPrimaryColorRes(primaryColor)
+                            .setBackgroundColor(primaryLightColor)
+                            .setPrimaryLightColorRes(primaryLightColor)
+                            .setPlaceholderColor(primaryLightColor)
+                            .show(vh.stickerCode);
+                }
+            });
             return view;
         }
 

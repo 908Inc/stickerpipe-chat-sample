@@ -8,29 +8,41 @@
                 android:paddingRight="@dimen/material_40">
 
     <ImageView
+        android:id="@+id/avatar"
         android:layout_width="@dimen/avatar_size"
         android:layout_height="@dimen/avatar_size"
-        android:src="@drawable/dad_ava"
-        android:id="@+id/avatar"/>
+        android:src="@drawable/dad_ava"/>
 
     <ImageView
         android:id="@+id/chat_item_sticker"
         android:layout_width="@dimen/sticker_item_size"
         android:layout_height="@dimen/sticker_item_size"
-        android:scaleType="fitStart"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="@dimen/material_48"/>
+        android:layout_marginLeft="@dimen/material_48"
+        android:scaleType="fitStart"/>
 
     <TextView
         android:id="@+id/chat_item_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/chat_item_sticker"
+        android:layout_marginBottom="@dimen/material_8"
+        android:layout_marginLeft="@dimen/material_48"
         android:gravity="left"
         android:text="Today, 9.18"
         android:textColor="@color/chat_item_text"
-        android:textSize="@dimen/text_12"
-        android:layout_below="@+id/chat_item_sticker"
-        android:layout_marginLeft="@dimen/material_48"
-        android:layout_marginBottom="@dimen/material_8"/>
+        android:textSize="@dimen/text_12"/>
+
+    <ImageView
+        android:id="@+id/download_icon"
+        android:layout_width="@dimen/material_32"
+        android:layout_height="@dimen/material_32"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/material_16"
+        android:layout_toEndOf="@+id/chat_item_sticker"
+        android:layout_toRightOf="@+id/chat_item_sticker"
+        android:src="@drawable/ic_action_file_download"
+        android:scaleType="centerInside"
+        android:visibility="gone"/>
 
 </RelativeLayout>

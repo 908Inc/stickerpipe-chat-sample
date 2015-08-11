@@ -26,7 +26,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'
-    compile('vc908.stickers:stickerfactory:0.2.2@aar') {
+    compile('vc908.stickers:stickerfactory:0.3.2@aar') {
         transitive = true;
     }
 }

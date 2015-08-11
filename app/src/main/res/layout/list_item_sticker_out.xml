@@ -30,4 +30,17 @@
         android:layout_alignLeft="@+id/chat_item_sticker"
         android:layout_alignStart="@+id/chat_item_sticker"/>
 
+
+    <ImageView
+        android:id="@+id/download_icon"
+        android:layout_width="@dimen/material_32"
+        android:layout_height="@dimen/material_32"
+        android:background="@color/blue_gray_500"
+        android:visibility="gone"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_action_file_download"
+        android:layout_toLeftOf="@+id/chat_item_sticker"
+        android:layout_toStartOf="@+id/chat_item_sticker"
+        android:scaleType="centerInside"
+        android:layout_marginRight="@dimen/material_16"/>
 </RelativeLayout>

@@ -21,7 +21,6 @@ compile('vc908.stickers:stickerfactory:x.x.x@aar') {
 }
 ```
 List of available versions you can find [here](http://maven.stickerpipe.com/artifactory/stickerfactory/vc908/stickers/stickerfactory/)
-## Using
 
 Add content provider with your application package to your manifest file:
 ```android
@@ -30,18 +29,94 @@ Add content provider with your application package to your manifest file:
      android:authorities="<YOUR PACKAGE>.stickersProvider"
      android:exported="false"/>
 ```
-
+## Using
+### Initializing
 Initialize library at your Application onCreate() method
 ```android
 StickersManager.initialize(“72921666b5ff8651f374747bfefaf7b2", this);
 ```
 You can get your own API Key on http://stickerpipe.com to have customized packs set.
-
+### Showing stickers fragment
 Create stickers fragment
 ```android
 stickersFragment = new StickersFragment.Builder().build();
 ```
 
+Then you only need to show fragment. See exaple with best practice.
+
+### Sending stickers
+To send stickers you need to set listener and handle results
+```android
+// create listener
+private OnStickerSelectedListener stickerSelectedListener = new OnStickerSelectedListener() {
+    @Override
+    public void onStickerSelected(String code) {
+        if (StickersManager.isSticker(code)) {
+	    // send message
+        } else {
+            // append emoji to your edittext
+        }
+    }
+};
+// set listener to your stickers fragment
+stickersFragment.setOnStickerSelectedListener(stickerSelectedListener)
+```
+
+Listener can take an emoji, so you need to check code first, and then send sticker code or append emoji to your edittext.
+
+### Displaying stickers
+```android
+// Show sticker in adapter
+if (StickersManager.isSticker(message)){ // check your chat message
+StickersManager.with(context) // your context - activity, fragment, etc
+        .loadSticker(message)
+          .into((imageView)); // your image view
+} else {
+	// show a message as it is
+}
+```
+As an additionl feature, you can check, is sticker exists at user's library, and show some marks
+```android
+if (StickersManager.isPackAtUserLibrary(stickerCode)) {
+	// show mark
+} else {
+	// hide mark
+}
+```
+![listmark](listmark.png)  
+
+Then you can set click listener and show pack info, where user can download pack.
+### Showing pack info
+You can show pack info using builder.
+```android
+ new PackInfoActivity.Builder(MainActivity.this)
+                            .show(stickerCode);
+```
+
+<img src="pack.png" width="300">
+
+### Showing new packs marker
+You can use MarkedImageView to indicate user, that he has a new pack
+```android
+            <vc908.stickerfactory.ui.view.MarkedImageView
+                android:id="@+id/stickers_btn"
+                android:layout_width="@dimen/material_48"
+                android:layout_height="@dimen/material_48"
+                android:layout_centerVertical="true"
+                app:centerColor="@android:color/black"
+                app:middleColor="@android:color/white"
+                app:outColor="@android:color/white"
+                android:background="?android:attr/selectableItemBackground"/>
+```
+![markers](marker.png)  
+
+Use this view as ImageView, other work will be doing by SDK
+```android
+MarkedImageView markedImageView = (MarkedImageView) findViewById(R.id.marked_image_view));
+imageView = markedImageView.getImageView(); // work with image view
+```
+## Customization
+### Stickers fragment
 You can customize stickers fragment with builder:
 
 - Set sticker selected listener
@@ -113,35 +188,8 @@ setEmptyRecentImageRes(@DrawableRes int emptyRecentImageRes)
 setEmptyRecentColorFilterRes(@ColorRes int emptyRecentColorFilterRes)
 ```
 
-Then you only need to show fragment.
-
-To send stickers you need to set listener and handle results
-```android
-// create listener
-private OnStickerSelectedListener stickerSelectedListener = new OnStickerSelectedListener() {
-    @Override
-    public void onStickerSelected(String code) {
-        if (StickersManager.isSticker(code)) {
-	    // send message
-        } else {
-            // append emoji to your edittext
-        }
-    }
-};
-// set listener to your stickers fragment
-stickersFragment.setOnStickerSelectedListener(stickerSelectedListener)
-Listener can take an emoji, so you need to check code first, and then send sticker code or append emoji to your edittext.
-
-// Show sticker in adapter
-if (StickersManager.isSticker(message)){ // check your chat message
-StickersManager.with(context) // your context - activity, fragment, etc
-        .loadSticker(message)
-          .into((imageView)); // your image view
-} else {
-	// show a message as it is
-}
-```
-And you can customize sticker loading process with next setters:
+### Loading process
+You can customize sticker loading process with next setters:
 
 - Set sticker placeholder drawable
 ```android
@@ -150,6 +198,44 @@ setPlaceholderDrawableRes(@DrawableRes int placeholderRes)
 - Set color filter for default placeholder
 ```android
 setPlaceholderColorFilterRes(@ColorRes int colorFilterRes)
+```
+
+### Pack info
+You can customize pack info screen with next setters:
+- Set primary color color, which used for toolbar, action link and progress under action link.
+```android
+setPrimaryLightColorRes(@ColorRes int colorRes)
+```
+- Set light color, which used for progress bar under action link
+```android
+setPrimaryLightColorRes(@ColorRes int colorRes)
+```
+- Set background color
+```android
+setBackgroundColor(@ColorRes int colorRes)
+````
+- Set placeholder drawable for stickers
+```android
+setPlaceholderDrawable(@DrawableRes int drawableRes)
+````        
+- Set placeholder color filter for stickers
+```android
+setPlaceholderColor(@ColorRes int colorRes)
+```
+
+### Marked image
+You can customize MarkedImageView marker with attributes
+```android
+<vc908.stickerfactory.ui.view.MarkedImageView
+	...
+	app:centerColor="@android:color/black"
+	app:middleColor="@android:color/white"
+    app:outColor="@android:color/white"
+    ... />
+```
+or setter
+```android
+setMarkerColors(@ColorRes int center, @ColorRes int middle, @ColorRes int outer) {
 ```
 
 ## Credits

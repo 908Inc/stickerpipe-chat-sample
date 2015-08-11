@@ -5,7 +5,6 @@ import android.support.annotation.ColorRes;
 
 import vc.s908.stickerpipe_chat_sample.R;
 
-
 /**
  * @author Dmitry Nezhydenko (dehimb@gmail.com)
  */
