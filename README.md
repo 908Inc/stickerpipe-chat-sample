@@ -22,7 +22,7 @@ compile('vc908.stickers:stickerfactory:x.x.x@aar') {
 ```
 List of available versions you can find [here](http://maven.stickerpipe.com/artifactory/stickerfactory/vc908/stickers/stickerfactory/)
 
-Add content provider with your application package to your manifest file:
+Add content provider with your application package to manifest file:
 ```android
 <provider
      android:name="vc908.stickerfactory.provider.StickersProvider"
@@ -52,7 +52,7 @@ private OnStickerSelectedListener stickerSelectedListener = new OnStickerSelecte
     @Override
     public void onStickerSelected(String code) {
         if (StickersManager.isSticker(code)) {
-	    // send message
+	        // send message
         } else {
             // append emoji to your edittext
         }
@@ -70,7 +70,7 @@ Listener can take an emoji, so you need to check code first, and then send stick
 if (StickersManager.isSticker(message)){ // check your chat message
 StickersManager.with(context) // your context - activity, fragment, etc
         .loadSticker(message)
-          .into((imageView)); // your image view
+        .into((imageView)); // your image view
 } else {
 	// show a message as it is
 }
@@ -96,7 +96,7 @@ You can show pack info using builder.
 <img src="pack.png" width="300">
 
 ### Showing new packs marker
-You can use MarkedImageView to indicate user, that he has a new pack
+You can use MarkedImageView to indicate to user, that he has a new pack
 ```android
             <vc908.stickerfactory.ui.view.MarkedImageView
                 android:id="@+id/stickers_btn"
@@ -116,6 +116,24 @@ MarkedImageView markedImageView = (MarkedImageView) findViewById(R.id.marked_ima
 imageView = markedImageView.getImageView(); // work with image view
 ```
 ## Customization
+### Colors
+You can customize all colors by overriding values with "sp_" prefix. This is next available values
+```xml
+    <color name="sp_primary">#5E7A87</color>
+    <color name="sp_primary_light">@android:color/white</color>
+    <color name="sp_placeholder_color_filer">@android:color/white</color>
+    <color name="sp_pack_info_bg">@android:color/white</color>
+    <color name="sp_stickers_tab_bg">@color/sp_primary</color>
+    <color name="sp_stickers_tab_strip">@android:color/white</color>
+    <color name="sp_stickers_list_bg">@android:color/white</color>
+    <color name="sp_stickers_tab_icons_filter">@android:color/white</color>
+    <color name="sp_stickers_emoji">@android:color/black</color>
+    <color name="sp_reorder_icon">#9e9e9e</color>
+    <color name="sp_primary_text">@android:color/black</color>
+    <color name="sp_secondary_text">#616161</color>
+    <color name="sp_list_item_pressed">#ffe1e1e1</color>
+    <color name="sp_list_item_normal">#ffffffff</color>
+```
 ### Stickers fragment
 You can customize stickers fragment with builder:
 
@@ -228,8 +246,8 @@ You can customize MarkedImageView marker with attributes
 ```android
 <vc908.stickerfactory.ui.view.MarkedImageView
 	...
-	app:centerColor="@android:color/black"
-	app:middleColor="@android:color/white"
+	app:centerColor="@android:color/white"
+	app:middleColor="@android:color/black"
     app:outColor="@android:color/white"
     ... />
 ```
@@ -237,7 +255,19 @@ or setter
 ```android
 setMarkerColors(@ColorRes int center, @ColorRes int middle, @ColorRes int outer) {
 ```
-
+## Languages
+Stickerpipe SDK support English language. If your application use another languages, you need add translation for next values
+```xml
+    <string name="sp_package_stored">Pack stored</string>
+    <string name="sp_package_removed">Pack removed</string>
+    <string name="sp_collections">Collections</string>
+    <string name="sp_recently_empty">We have wonderful stickers!\nSwipe left and start using</string>
+    <string name="sp_pack_info">Pack info</string>
+    <string name="sp_pack_download">Download</string>
+    <string name="sp_pack_remove">Remove pack</string>
+    <string name="sp_no_internet_connection">No internet connection</string>
+    <string name="sp_cant_process_request">Can not process request</string>
+```
 ## Credits
 
 908 Inc.
