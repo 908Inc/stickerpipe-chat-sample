@@ -96,9 +96,9 @@ You can show pack info using builder.
 <img src="pack.png" width="300">
 
 ### Showing new packs marker
-You can use MarkedImageView to indicate to user, that he has a new pack
+You can use BadgedStickersButton to indicate to user, that he has a new pack
 ```android
-            <vc908.stickerfactory.ui.view.MarkedImageView
+            <vc908.stickerfactory.ui.view.BadgedStickersButton
                 android:id="@+id/stickers_btn"
                 android:layout_width="@dimen/material_48"
                 android:layout_height="@dimen/material_48"
@@ -110,11 +110,8 @@ You can use MarkedImageView to indicate to user, that he has a new pack
 ```
 ![markers](marker.png)  
 
-Use this view as ImageView, other work will be doing by SDK
-```android
-MarkedImageView markedImageView = (MarkedImageView) findViewById(R.id.marked_image_view));
-imageView = markedImageView.getImageView(); // work with image view
-```
+Use this view as ImageButton, other work will be doing by SDK.
+
 ## Customization
 ### Colors
 You can customize all colors by overriding values with "sp_" prefix. This is next available values
@@ -242,9 +239,9 @@ setPlaceholderColor(@ColorRes int colorRes)
 ```
 
 ### Marked image
-You can customize MarkedImageView marker with attributes
+You can customize BadgedStickersButton badge with attributes
 ```android
-<vc908.stickerfactory.ui.view.MarkedImageView
+<vc908.stickerfactory.ui.view.BadgedStickersButton
 	...
 	app:centerColor="@android:color/white"
 	app:middleColor="@android:color/black"
@@ -253,7 +250,7 @@ You can customize MarkedImageView marker with attributes
 ```
 or setter
 ```android
-setMarkerColors(@ColorRes int center, @ColorRes int middle, @ColorRes int outer) {
+setBadgeColors(@ColorRes int center, @ColorRes int middle, @ColorRes int outer) {
 ```
 ## Languages
 Stickerpipe SDK support English language. If your application use another languages, you need add translation for next values

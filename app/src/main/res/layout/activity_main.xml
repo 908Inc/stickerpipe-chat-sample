@@ -70,7 +70,7 @@
                 android:textSize="@dimen/text_14"/>
 
 
-            <vc908.stickerfactory.ui.view.MarkedImageView
+            <vc908.stickerfactory.ui.view.BadgedStickersButton
                 android:id="@+id/stickers_btn"
                 android:layout_width="@dimen/material_48"
                 android:layout_height="@dimen/material_48"

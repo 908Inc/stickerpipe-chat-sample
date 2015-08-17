@@ -37,8 +37,8 @@ import vc908.stickerfactory.ui.OnEmojiBackspaceClickListener;
 import vc908.stickerfactory.ui.OnStickerSelectedListener;
 import vc908.stickerfactory.ui.activity.PackInfoActivity;
 import vc908.stickerfactory.ui.fragment.StickersFragment;
+import vc908.stickerfactory.ui.view.BadgedStickersButton;
 import vc908.stickerfactory.ui.view.KeyboardHandleRelativeLayout;
-import vc908.stickerfactory.ui.view.MarkedImageView;
 import vc908.stickerfactory.utils.KeyboardUtils;
 
 
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
     private static final String STICKERS_FRAME_STATE = "stickers_frame_state";
     private KeyboardHandleRelativeLayout keyboardHandleLayout;
     private View chatContentGroup;
-    private ImageView stickerButton;
+    private BadgedStickersButton stickerButton;
     private boolean isStickerUsed;
     private View tryStickersView;
     private PaletteDialog paletteDialog;
@@ -134,9 +134,8 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
             }
         });
         setStickersFrameVisible(isStickersFrameVisible);
-        MarkedImageView markedImageView = ((MarkedImageView) findViewById(R.id.stickers_btn));
-        markedImageView.setMarkerColors(android.R.color.white, R.color.red_500, android.R.color.white);
-        stickerButton = markedImageView.getImageView();
+        stickerButton = ((BadgedStickersButton) findViewById(R.id.stickers_btn));
+        stickerButton.setBadgeColors(android.R.color.white, R.color.red_500, android.R.color.white);
         stickerButton.setColorFilter(getResources().getColor(primaryColor));
         stickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
