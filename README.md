@@ -111,7 +111,12 @@ You can use BadgedStickersButton to indicate to user, that he has a new pack
 ![markers](marker.png)  
 
 Use this view as ImageButton, other work will be doing by SDK.
-
+## Users
+When you know your user id, set it to sdk
+```Android
+StickersManager.setUserID("some user id");
+```
+This add ability to users to manage their packs and don't lose them after reinstalling
 ## Customization
 ### Colors
 You can customize all colors by overriding values with "sp_" prefix. This is next available values

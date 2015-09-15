@@ -3,6 +3,7 @@ package vc.s908.stickerpipe_chat_sample;
 import android.app.Application;
 
 import vc908.stickerfactory.StickersManager;
+import vc908.stickerfactory.utils.Utils;
 
 /**
  * Created by Dmitry Nezhydenko
@@ -14,5 +15,6 @@ public class App extends Application {
         super.onCreate();
         StickersManager.setLoggingEnabled(true);
         StickersManager.initialize("72921666b5ff8651f374747bfefaf7b2", this);
+        StickersManager.setUserID(Utils.getDeviceId(this));
     }
 }

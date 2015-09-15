@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
             public void onClick(View v) {
                 if (isStickersFrameVisible) {
                     showKeyboard();
-                    stickerButton.setImageResource(R.drawable.ic_stickers);
+                    stickerButton.setImageResource(R.drawable.sp_ic_stickers);
                 } else {
                     if (keyboardHandleLayout.isKeyboardVisible()) {
                         keyboardHandleLayout.hideKeyboard(MainActivity.this, new KeyboardHandleRelativeLayout.OnKeyboardHideCallback() {
@@ -538,7 +538,7 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
         } else {
             super.onBackPressed();
         }
-        stickerButton.setImageResource(R.drawable.ic_stickers);
+        stickerButton.setImageResource(R.drawable.sp_ic_stickers);
     }
 
     private void setStickersFrameVisible(final boolean isVisible) {
@@ -579,12 +579,12 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
     public void onKeyboardVisibilityChanged(boolean isVisible) {
         if (isVisible) {
             setStickersFrameVisible(false);
-            stickerButton.setImageResource(R.drawable.ic_stickers);
+            stickerButton.setImageResource(R.drawable.sp_ic_stickers);
         } else {
             if (isStickersFrameVisible) {
                 stickerButton.setImageResource(R.drawable.ic_keyboard);
             } else {
-                stickerButton.setImageResource(R.drawable.ic_stickers);
+                stickerButton.setImageResource(R.drawable.sp_ic_stickers);
             }
         }
         scrollToBottomIfNeed();

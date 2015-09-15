@@ -15,8 +15,8 @@
 
     <ImageView
         android:id="@+id/chat_item_sticker"
-        android:layout_width="@dimen/sticker_item_size"
-        android:layout_height="@dimen/sticker_item_size"
+        android:layout_width="@dimen/sp_sticker_item_size"
+        android:layout_height="@dimen/sp_sticker_item_size"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="@dimen/material_48"
         android:scaleType="fitStart"/>
