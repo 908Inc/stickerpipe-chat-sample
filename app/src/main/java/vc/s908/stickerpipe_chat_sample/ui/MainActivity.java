@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
             }
         });
         keyboardHandleLayout = (KeyboardHandleRelativeLayout) findViewById(R.id.sizeNotifierLayout);
-        keyboardHandleLayout.listener = this;
+        keyboardHandleLayout.setOnKeyboardSizeChangeListener(this);
 
         adapter = new ChatAdapter();
         list.setAdapter(adapter);

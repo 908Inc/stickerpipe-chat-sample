@@ -4,6 +4,7 @@ import android.app.Application;
 
 import vc908.stickerfactory.StickersManager;
 import vc908.stickerfactory.utils.Utils;
+import vc908.stickerpipe.gcmintegration.GcmManager;
 
 /**
  * Created by Dmitry Nezhydenko
@@ -16,5 +17,6 @@ public class App extends Application {
         StickersManager.setLoggingEnabled(true);
         StickersManager.initialize("72921666b5ff8651f374747bfefaf7b2", this);
         StickersManager.setUserID(Utils.getDeviceId(this));
+        GcmManager.setGcmSenderId(this, "86472317986");
     }
 }
