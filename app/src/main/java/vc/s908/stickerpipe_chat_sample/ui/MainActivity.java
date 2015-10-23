@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(primaryDarkColor));
+            window.setStatusBarColor(ContextCompat.getColor(this, primaryDarkColor));
         }
 
         isStickerUsed = StorageManager.getInstance(this).isStickerUsed();
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
         editMessage.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         chatContentGroup = findViewById(R.id.chat_content);
         ImageView buttonSend = (ImageView) findViewById(R.id.send_btn);
-        buttonSend.setColorFilter(getResources().getColor(primaryColor));
+        buttonSend.setColorFilter(ContextCompat.getColor(this, primaryColor));
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
             }
         });
         keyboardHandleLayout = (KeyboardHandleRelativeLayout) findViewById(R.id.sizeNotifierLayout);
-        keyboardHandleLayout.setOnKeyboardSizeChangeListener(this);
+        keyboardHandleLayout.setKeyboardSizeChangeListener(this);
 
         adapter = new ChatAdapter();
         list.setAdapter(adapter);
@@ -114,14 +115,7 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
         updateStickersFrameParams();
         StickersFragment stickersFragment = (StickersFragment) getSupportFragmentManager().findFragmentById(R.id.frame);
         if (stickersFragment == null) {
-            stickersFragment = new StickersFragment.Builder()
-                    .setTabBackgroundColorRes(primaryColor)
-                    .setStickerPlaceholderColorFilterRes(primaryLightColor)
-                    .setBackspaceFilterColorRes(primaryColor)
-                    .setEmptyRecentColorFilterRes(primaryColor)
-                    .setEmptyRecentTextColorRes(primaryColor)
-                    .setTabPlaceholderFilterColorRes(primaryLightColor)
-                    .build();
+            stickersFragment = new StickersFragment();
             getSupportFragmentManager().beginTransaction().replace(R.id.frame, stickersFragment).commit();
         }
         stickersFragment.setOnStickerSelectedListener(stickerSelectedListener);
@@ -135,8 +129,7 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
         });
         setStickersFrameVisible(isStickersFrameVisible);
         stickerButton = ((BadgedStickersButton) findViewById(R.id.stickers_btn));
-        stickerButton.setBadgeColors(android.R.color.white, R.color.red_500, android.R.color.white);
-        stickerButton.setColorFilter(getResources().getColor(primaryColor));
+        stickerButton.setColorFilter(ContextCompat.getColor(this, primaryColor));
         stickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
                     stickerButton.setImageResource(R.drawable.sp_ic_stickers);
                 } else {
                     if (keyboardHandleLayout.isKeyboardVisible()) {
-                        keyboardHandleLayout.hideKeyboard(MainActivity.this, new KeyboardHandleRelativeLayout.OnKeyboardHideCallback() {
+                        keyboardHandleLayout.hideKeyboard(MainActivity.this, new KeyboardHandleRelativeLayout.KeyboardHideCallback() {
                             @Override
                             public void onKeyboardHide() {
                                 stickerButton.setImageResource(R.drawable.ic_keyboard);
@@ -489,12 +482,7 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new PackInfoActivity.Builder(MainActivity.this)
-                            .setPrimaryColorRes(primaryColor)
-                            .setBackgroundColor(primaryLightColor)
-                            .setPrimaryLightColorRes(primaryLightColor)
-                            .setPlaceholderColor(primaryLightColor)
-                            .show(vh.stickerCode);
+                    PackInfoActivity.show(MainActivity.this, vh.stickerCode);
                 }
             });
             return view;
@@ -503,7 +491,6 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
         private void loadSticker(ImageView convertView, String message) {
             StickersManager.with(MainActivity.this)
                     .loadSticker(message)
-                    .setPlaceholderColorFilterRes(primaryLightColor)
                     .into((convertView));
         }
 
