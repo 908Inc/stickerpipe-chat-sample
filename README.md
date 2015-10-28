@@ -1,5 +1,6 @@
 ## Table of contents
 
+- [Table of contents](#table-of-contents)
 - [About](#about)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -17,11 +18,9 @@
 	- [Notification icon](#notification-icon)
 - [Customization](#customization)
 	- [Colors](#colors)
-	- [Stickers fragment](#stickers-fragment)
-	- [Loading process](#loading-process)
-	- [Pack info](#pack-info)
-	- [Marked image](#marked-image)
-- [Languages](#languages)
+	- [Languages](#languages)
+- [Statistics](#statistics)
+	- [Messages and stickers count](#messages-and-stickers-count)
 - [Credits](#credits)
 - [Contact](#contact)
 - [License](#license)
@@ -301,6 +300,14 @@ Stickerpipe SDK support English language. If your application use another langua
 <string name="sp_open_stickers">Open stickers</string>
 <string name="sp_free">Free</string>
 ```
+## Statistics
+
+### Messages and stickers count
+To count the number of sendings messages and stickers, you need call an analysts method onUserMessageSent (boolean)
+```Android
+AnalyticsManager.getInstance().onUserMessageSent(StickersManager.isSticker(message));
+```
+Call this method when a user sent a message
 
 ## Credits
 
