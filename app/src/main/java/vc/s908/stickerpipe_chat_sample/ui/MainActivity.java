@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,6 +35,7 @@ import java.util.Random;
 import vc.s908.stickerpipe_chat_sample.R;
 import vc.s908.stickerpipe_chat_sample.manager.StorageManager;
 import vc908.stickerfactory.StickersManager;
+import vc908.stickerfactory.SubscriptionListener;
 import vc908.stickerfactory.ui.OnEmojiBackspaceClickListener;
 import vc908.stickerfactory.ui.OnStickerSelectedListener;
 import vc908.stickerfactory.ui.activity.PackInfoActivity;
@@ -43,7 +45,7 @@ import vc908.stickerfactory.ui.view.KeyboardHandleRelativeLayout;
 import vc908.stickerfactory.utils.KeyboardUtils;
 
 
-public class MainActivity extends AppCompatActivity implements KeyboardHandleRelativeLayout.KeyboardSizeChangeListener {
+public class MainActivity extends AppCompatActivity implements KeyboardHandleRelativeLayout.KeyboardSizeChangeListener, SubscriptionListener {
 
     private List<ChatItem> items = new ArrayList<>();
     private ChatAdapter adapter;
@@ -298,6 +300,12 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
                 }
             });
         }
+    }
+
+    @Override
+    public void onSubscriptionActivateClicked() {
+        Toast.makeText(this, "Subscribed", Toast.LENGTH_SHORT).show();
+        StickersManager.setUserSubscribed(true);
     }
 
 

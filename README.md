@@ -32,6 +32,9 @@ This sample demonstrates how to add stickers to your chat.
 
 See [changelog](CHANGELOG.md) for new version changes
 
+**Important**  
+Latest version of google support and design libraries has some bugs and incompatible changes. For correct working of stickerpipe SDK you need to use 23.0.1 version for support and design libraries.
+
 ![android](static/sample.gif)
 
 ## Installation
