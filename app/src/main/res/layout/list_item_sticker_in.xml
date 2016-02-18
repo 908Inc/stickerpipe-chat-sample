@@ -33,16 +33,4 @@
         android:textColor="@color/chat_item_text"
         android:textSize="@dimen/text_12"/>
 
-    <ImageView
-        android:id="@+id/download_icon"
-        android:layout_width="@dimen/material_32"
-        android:layout_height="@dimen/material_32"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/material_16"
-        android:layout_toEndOf="@+id/chat_item_sticker"
-        android:layout_toRightOf="@+id/chat_item_sticker"
-        android:src="@drawable/ic_action_file_download"
-        android:scaleType="centerInside"
-        android:visibility="gone"/>
-
 </RelativeLayout>

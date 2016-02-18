@@ -38,7 +38,6 @@ import vc908.stickerfactory.StickersManager;
 import vc908.stickerfactory.SubscriptionListener;
 import vc908.stickerfactory.ui.OnEmojiBackspaceClickListener;
 import vc908.stickerfactory.ui.OnStickerSelectedListener;
-import vc908.stickerfactory.ui.activity.PackInfoActivity;
 import vc908.stickerfactory.ui.fragment.StickersFragment;
 import vc908.stickerfactory.ui.view.BadgedStickersButton;
 import vc908.stickerfactory.ui.view.KeyboardHandleRelativeLayout;
@@ -64,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
     private boolean isBotJobRunning;
     private Random random = new Random();
     private int primaryLightColor;
-    private int primaryColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
         if (savedInstanceState != null) {
             isStickersFrameVisible = savedInstanceState.getBoolean(STICKERS_FRAME_STATE);
         }
-        primaryColor = StorageManager.getInstance(this).getPrimaryColor();
+        int primaryColor = StorageManager.getInstance(this).getPrimaryColor();
         primaryLightColor = StorageManager.getInstance(this).getPrimaryLightColor();
         int primaryDarkColor = StorageManager.getInstance(this).getPrimaryDarkColor();
 
@@ -87,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(ContextCompat.getColor(this, primaryDarkColor));
         }
-
         isStickerUsed = StorageManager.getInstance(this).isStickerUsed();
         tryStickersView = findViewById(R.id.try_stickers);
         if (!isStickerUsed) {
@@ -112,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
 
         adapter = new ChatAdapter();
         list.setAdapter(adapter);
-//        list.setStackFromBottom(true);
         stickersFrame = findViewById(R.id.frame);
         updateStickersFrameParams();
         StickersFragment stickersFragment = (StickersFragment) getSupportFragmentManager().findFragmentById(R.id.frame);
@@ -175,12 +171,8 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
         if (isBotJobRunning || forceStop) {
             handler.removeCallbacks(botJobRunnable);
             isBotJobRunning = false;
-            if (!forceStop) {
-//                Toast.makeText(this, "Bot job stopped", Toast.LENGTH_SHORT).show();
-            }
         } else {
             scheduleBotJob();
-//            Toast.makeText(this, "Bot job started", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -227,9 +219,6 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
                 }
                 paletteDialog.show();
                 break;
-//            case R.id.action_bot:
-//                switchBotJob(false);
-//                break;
             default:
         }
         return super.onOptionsItemSelected(item);
@@ -238,15 +227,14 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
     private void addMockData() {
         long yesterdayTime = System.currentTimeMillis() - 34 * 60 * 60 * 1000;
         addMessage("Carl!", true, yesterdayTime - 60 * 1000);
+        addMessage("[[1419]]", true, yesterdayTime - 55 * 1000);
+        addMessage("[[1420]]", true, yesterdayTime - 55 * 1000);
         addMessage("Did you hear about the kidnapping back at the prison?", true, yesterdayTime - 50 * 1000);
         addMessage("Luke?! Molly?! Are they okay?", false, yesterdayTime - 40 * 1000);
         addMessage("Yeah, it's okay. They woke up.\uD83D\uDE0A", true, yesterdayTime - 30 * 1000);
-//        addMessage("[[pinkgorilla_brutal]]", true, yesterdayTime - 25 * 1000);
         addMessage("Dad", false, yesterdayTime);
         addMessage("...", false, yesterdayTime + 10 * 1000);
-//        addMessage("[[pinkgorilla_hm]]", false, yesterdayTime + 30 * 1000);
-//        addMessage("[[mems_sadness]]", true, yesterdayTime + 100 * 1000);
-        addMessage("[[flowers_flower1]]", true, yesterdayTime + 100 * 1000);
+        addMessage("[[gorilla27_loveyou]]", true, yesterdayTime + 100 * 1000);
     }
 
     private void showKeyboard() {
@@ -310,8 +298,6 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
 
 
     private class ChatAdapter extends BaseAdapter {
-
-        private Drawable downloadBgDrawable;
 
         @Override
         public int getCount() {
@@ -383,20 +369,6 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
                 case STICKER_OUT:
                     loadSticker(vh.messageSticker, item.getMessage());
                     vh.stickerCode = item.getMessage();
-                    if (vh.downloadImage != null) {
-                        if (StickersManager.isPackAtUserLibrary(item.getMessage())) {
-                            vh.downloadImage.setVisibility(View.GONE);
-                        } else {
-                            if (downloadBgDrawable == null) {
-                                downloadBgDrawable = getResources().getDrawable(R.drawable.download_pack_bg);
-                            }
-                            if (downloadBgDrawable != null) {
-                                downloadBgDrawable.setColorFilter(getResources().getColor(primaryColor), PorterDuff.Mode.SRC_IN);
-                                vh.downloadImage.setBackgroundDrawable(downloadBgDrawable);
-                            }
-                            vh.downloadImage.setVisibility(View.VISIBLE);
-                        }
-                    }
                     break;
                 default:
                     throw new RuntimeException("Unknown item type");
@@ -469,7 +441,6 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
             TextView messageView;
             TextView timeView;
             ImageView messageSticker;
-            View downloadImage;
             View avatar;
         }
 
@@ -485,12 +456,11 @@ public class MainActivity extends AppCompatActivity implements KeyboardHandleRel
             vh.messageSticker = (ImageView) view.findViewById(R.id.chat_item_sticker);
             vh.timeView = (TextView) view.findViewById(R.id.chat_item_time);
             vh.avatar = view.findViewById(R.id.avatar);
-            vh.downloadImage = view.findViewById(R.id.download_icon);
             view.setTag(vh);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PackInfoActivity.show(MainActivity.this, vh.stickerCode);
+                    StickersManager.showPackInfoByCode(MainActivity.this, vh.stickerCode);
                 }
             });
             return view;

@@ -1,6 +1,5 @@
 ## Table of contents
 
-- [Table of contents](#table-of-contents)
 - [About](#about)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -11,6 +10,10 @@
 	- [Showing pack info](#showing-pack-info)
 	- [Showing new packs marker](#showing-new-packs-marker)
 - [Users](#users)
+- [Selling content](#selling-content)
+	- [InApp purchases](#inapp-purchases)
+	- [Internal currency](#internal-currency)
+	- [Subscription model](#subscription-model)
 - [GCM Support](#gcm-support)
 	- [GCM integration module](#gcm-integration-module)
 	- [Own GCM implementation](#own-gcm-implementation)
@@ -28,12 +31,11 @@
 ## About
 
 **StickerPipe** is a stickers SDK for Android platform.
-This sample demonstrates how to add stickers to your chat.
+This sample demonstrates how to add stickers to your chat. If you want to build your own implementation, you can use our [public api](https://docs.google.com/document/d/1l0IZOSEZn1qzhCen4-YzlwnXL4xYHndNcE3xyGYvPrg/edit#heading=h.smt8analmeuq).
 
-See [changelog](CHANGELOG.md) for new version changes
 
 **Important**  
-Latest version of google support and design libraries has some bugs and incompatible changes. For correct working of stickerpipe SDK you need to use 23.0.1 version for support and design libraries.
+Latest version of google support and design libraries has some problems and incompatible changes. For correct working of stickerpipe SDK you need to use 23.0.1 version for support and design libraries.
 
 ![android](static/sample.gif)
 
@@ -82,7 +84,7 @@ if(stickersFragment == null){
 }
 ```
 
-Then you only need to show fragment. See exaple with best practice.
+Then you only need to show fragment. See example with best practice.
 
 ### Sending stickers
 
@@ -117,30 +119,19 @@ StickersManager.with(context) // your context - activity, fragment, etc
 	// show a message as it is
 }
 ```
-As an additional feature, you can check, is sticker exists at user's library, and show some marks
-```android
-if (StickersManager.isPackAtUserLibrary(stickerCode)) {
-	// show mark
-} else {
-	// hide mark
-}
-```
-![listmark](static/listmark.png)  
-
-Then you can set click listener and show pack info, where user can download pack.
 
 ### Showing pack info
 
 You can show pack info with next code
 ```android
- PackInfoActivity.show(context, stickerCode);
+ StickersManager.showPackInfoByCode(context, stickerCode);
 ```
 
 <img src="static/pack.png" width="300">
 
-### Showing new packs marker
+### Showing new content marker
 
-You can use BadgedStickersButton to indicate to user, that he has a new pack
+You can use BadgedStickersButton to indicate to user, that he has a new content
 ```android
             <vc908.stickerfactory.ui.view.BadgedStickersButton
                 android:id="@+id/stickers_btn"
@@ -151,20 +142,81 @@ You can use BadgedStickersButton to indicate to user, that he has a new pack
 ```
 ![markers](static/marker.png)  
 
-Use this view as ImageButton, other work will be doing by SDK.
-
 ## Users
 
 When you know your user id, set it to sdk   
 
 ```Android
-StickersManager.setUserID("some user id");
+StickersManager.setUserID("some unique user id");
 ```
-This add ability to users to manage their packs and don't lose them after reinstalling
+This add ability to make purchases, manage their packs and don't lose them after reinstalling.  
+You can obfuscate user id before setting it to sdk using md5 method from our Utils class
+```Android
+StickersManager.setUserID(vc908.stickerfactory.utils.Utils.md5("some unique user id, email, etc"));
+```
+
+Also you can send user related data, such as age or gender
+```Android
+Map<String, String> userData = new HashMap<>();
+userData.put(User.KEY_GENDER, User.GENDER_MALE);
+userData.put(User.KEY_AGE, String.valueOf(30));
+
+StickersManager.setUser("some unique user id", userData);
+```
+
+## Selling content
+You have an ability to sell content via your internal currency, inApp purchases or provide via subscription model. We use price points for selling our content. Currently we have A, B and C price points. We use A to mark FREE content and B/C for the paid content. Basically B is equal to 0.99$ and C equal to 1.99$ but the actual price can be vary depend on the countries and others circumstances.
+
+<img src="static/shop.png" width="300">
+
+### InApp purchases
+To sell content via inApp purchases, you need to create products for B and C content at your developer console and then set SKU ids to sdk
+```Android
+StickersManager.setPrices(new Prices()
+                .setSkuB("pack_b")
+                .setSkuC("pack_c")
+				);
+```
+### Internal currency
+To sell content via internal currency, you need to set your prices to sdk. This price labels will be showed at stickers shop, values you will received at callback from shop.
+```Android
+StickersManager.setPrices(new Prices()
+                .setPricePointB("$0.99", 0.99f)
+                .setPricePointC("$1.99", 1.99f)
+                );
+```
+Next you need to extend ShopWebViewActivity and implement onPurchase method. At this method you will receive all nececcary information.
+```Android
+public class ShopActivity extends vc908.stickerfactory.ui.activity.ShopWebViewActivity {
+    @Override
+    protected void onPurchase(String packTitle, final String packName, PricePoint pricePoint) {
+        // Your charging logic
+    }
+}
+```
+After successful or failed(canceled) purchasing, you need to call necessary methods
+```Android
+// Successfully purchased pack
+ StickersManager.onPackPurchased(packName);
+
+ // Canceled of failed purchasing
+ // This method from ShopWebViewActivity
+  onPurchaseFail();
+```
+At last, you need to set your custom class to sdk
+```Android
+StickersManager.setShopClass(ShopActivity.class);
+```
+
+### Subscription model
+If you want to use subscription model, you need to set subscription flag to sdk, when user became or ceased to be subscriber(or premium user). After this, content with B price point be available for free for subscribers(premium users)
+```Android
+StickersManager.setUserSubscribed(true);
+```
 
 ## GCM Support
 
-Starting from version 0.6.4 you have an ability to add push notifications to sdk. This is necessary, when you change content(add or remove packs) or want to promote some pack. There are two ways - use GcmIntegration module or use own notification system
+You have an ability to add push notifications to sdk. This is necessary, when you change content(add or remove packs) or want to promote some pack. There are two ways - use GcmIntegration module or use own notification system
 
 ### GCM integration module
 
@@ -191,7 +243,7 @@ If your application don't have gcm functionality you need to follow next steps
         </receiver>
 ```
 - Retrieve Android GCM API key and store them   
-Follow [this link](https://developers.google.com/mobile/add) and setup your application to obtain GCM API key. Next folow to your [admin panel](http://stickerpipe.com/cp), press "Manage" and store key.
+Follow [this link](https://developers.google.com/mobile/add) and setup your application to obtain GCM API key. Next follow to your [admin panel](http://stickerpipe.com/cp), press "Manage" and store key.
 
 ![store gcm key](static/storeKey.png)
 
@@ -301,7 +353,17 @@ Stickerpipe SDK support English language. If your application use another langua
 <string name="sp_cant_process_request">Can not process request</string>
 <string name="sp_content_is_unavailable">This content is currently\nunavailable</string>
 <string name="sp_open_stickers">Open stickers</string>
+<string name="sp_shop">Shop</string>
+<string name="sp_tab_new">New</string>
+<string name="sp_tab_top">Top</string>
+<string name="sp_tab_free">Free</string>
 <string name="sp_free">Free</string>
+<string name="sp_shop_packs_list_promo_title" formatted="false">%s %s</string>
+<string name="sp_activate">Activate</string>
+<string name="sp_subscription_text">Send emotions with original Stickers! Available on premium status.</string>
+<string name="sp_undo">Undo</string>
+<string name="sp_reload">Reload</string>
+<string name="sp_download">Download</string>
 ```
 ## Statistics
 

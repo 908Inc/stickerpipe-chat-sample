@@ -30,7 +30,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.0.1'
-    compile('vc908.stickers:stickerfactory:0.7.15') {
+    compile('vc908.stickers:stickerfactory:0.9.1') {
         transitive = true;
     }
     compile('vc908.stickers:gcmintegration:0.1.4@aar') {
