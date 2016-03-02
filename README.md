@@ -71,7 +71,7 @@ Add content provider with your application package to manifest file:
 
 Initialize library at your Application onCreate() method
 ```android
-StickersManager.initialize(“72921666b5ff8651f374747bfefaf7b2", this);
+StickersManager.initialize(“YOUR-API-KEY", this);
 ```
 You can get your own API Key on http://stickerpipe.com to have customized packs set.
 
