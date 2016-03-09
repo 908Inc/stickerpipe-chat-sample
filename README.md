@@ -35,7 +35,7 @@ This sample demonstrates how to add stickers to your chat. If you want to build 
 
 
 **Important**  
-Latest version of google support and design libraries has some problems and incompatible changes. For correct working of stickerpipe SDK you need to use 23.0.1 version for support and design libraries.
+If you are using TabLayout from design library, check this [issue](https://code.google.com/p/android/issues/detail?id=201827)
 
 ![android](static/sample.gif)
 

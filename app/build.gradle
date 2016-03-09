@@ -6,7 +6,7 @@ repositories {
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "vc.s908.stickerpipe_chat_sample"
@@ -29,11 +29,11 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.0.1'
-    compile('vc908.stickers:stickerfactory:0.9.1') {
+    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile('vc908.stickers:stickerfactory:0.9.14') {
         transitive = true;
     }
-    compile('vc908.stickers:gcmintegration:0.1.4@aar') {
+    compile('vc908.stickers:gcmintegration:0.1.5@aar') {
         transitive = true;
     }
 }

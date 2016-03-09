@@ -21,7 +21,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         StickersManager.setLoggingEnabled(true);
-        StickersManager.initialize("72921666b5ff8651f374747bfefaf7b2", this);
+        StickersManager.initialize("cf524cb1eba30e438d575453808b228c", this);
 
         Map<String, String> meta = new HashMap<>();
         meta.put(User.KEY_GENDER, User.GENDER_FEMALE);
