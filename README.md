@@ -24,6 +24,7 @@
 	- [Languages](#languages)
 - [Statistics](#statistics)
 	- [Messages and stickers count](#messages-and-stickers-count)
+- [Issues](#issues)
 - [Credits](#credits)
 - [Contact](#contact)
 - [License](#license)
@@ -32,10 +33,6 @@
 
 **StickerPipe** is a stickers SDK for Android platform.
 This sample demonstrates how to add stickers to your chat. If you want to build your own implementation, you can use our [public api](https://docs.google.com/document/d/1l0IZOSEZn1qzhCen4-YzlwnXL4xYHndNcE3xyGYvPrg/edit#heading=h.smt8analmeuq).
-
-
-**Important**  
-If you are using TabLayout from design library, check this [issue](https://code.google.com/p/android/issues/detail?id=201827)
 
 ![android](static/sample.gif)
 
@@ -373,6 +370,10 @@ To count the number of sendings messages and stickers, you need call an analysts
 AnalyticsManager.getInstance().onUserMessageSent(StickersManager.isSticker(message));
 ```
 Call this method when a user sent a message
+
+## Issues
+
+If you are using TabLayout from design library, check this [issue](https://code.google.com/p/android/issues/detail?id=201827)
 
 ## Credits
 
