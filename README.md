@@ -31,7 +31,7 @@
 
 ## About
 
-**StickerPipe** is a stickers SDK for Android platform.
+**Stickerpipe** is a stickers SDK for Android platform.
 This sample demonstrates how to add stickers to your chat. If you want to build your own implementation, you can use our [public api](https://docs.google.com/document/d/1l0IZOSEZn1qzhCen4-YzlwnXL4xYHndNcE3xyGYvPrg/edit#heading=h.smt8analmeuq).
 
 ![android](static/sample.gif)
@@ -388,4 +388,4 @@ mail@908.vc
 ## License
 
 
-StickerPipe is available under the Apache 2 license. See the [LICENSE](LICENSE) file for more information.
+Stickerpipe is available under the Apache 2 license. See the [LICENSE](LICENSE) file for more information.
