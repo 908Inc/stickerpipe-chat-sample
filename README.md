@@ -219,7 +219,7 @@ You have an ability to add push notifications to sdk. This is necessary, when yo
 
 If your application don't have gcm functionality you need to follow next steps   
 
-- Add dependency at your build file. List of available versions you can find [here](http://maven.stickerpipe.com/artifactory/stickerfactory/vc908/stickers/stickerfactory/)
+- Add dependency at your build file. List of available versions you can find [here](http://maven.stickerpipe.com/artifactory/stickerfactory/vc908/stickers/gcmintegration/)
 ```android
     compile('vc908.stickers:gcmintegration:x.x.x@aar'){
         transitive = true;
