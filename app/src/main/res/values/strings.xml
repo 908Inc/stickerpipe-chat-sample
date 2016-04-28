@@ -1,8 +1,4 @@
 <resources>
     <string name="app_name">Stickerpipe</string>
-    <string name="action_palette">Palette</string>
-    <string name="action_bot">Bot</string>
     <string name="message">Message</string>
-    <string name="try_stickers">Try stickers!</string>
-    <string name="change_palette">Change Palette</string>
 </resources>

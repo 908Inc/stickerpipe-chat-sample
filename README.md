@@ -17,8 +17,6 @@
 - [GCM Support](#gcm-support)
 	- [GCM integration module](#gcm-integration-module)
 	- [Own GCM implementation](#own-gcm-implementation)
-	- [Custom events](#custom-events)
-	- [Notification icon](#notification-icon)
 - [Customization](#customization)
 	- [Colors](#colors)
 	- [Languages](#languages)
@@ -73,15 +71,95 @@ StickersManager.initialize(“YOUR-API-KEY", this);
 You can get your own API Key on http://stickerpipe.com to have customized packs set.
 
 ### Showing stickers fragment
+We created some additional classes, to help you integrate stickers keyboard naturally to your app.
+You still can simply create StickersFragment and use them, but we recommend our approach with StickersKeyboardController. This will make your integration more simple and give users more positive experience. See example for more details.
 
-Create stickers fragment
-```android
-if(stickersFragment == null){
-		stickersFragment = new StickersFragment();
+First of all, you need to create layout with following structure
+
+```xml
+<vc908.stickerfactory.ui.view.StickersKeyboardLayout
+    android:id="@+id/sizeNotifierLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/chat_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+      <!-- YOR CONTENT -->
+
+
+            <vc908.stickerfactory.ui.view.BadgedStickersButton
+                android:id="@+id/stickers_btn"
+                android:layout_width="@dimen/material_48"
+                android:layout_height="@dimen/material_48"
+                android:background="?android:attr/selectableItemBackground"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"/>
+</vc908.stickerfactory.ui.view.StickersKeyboardLayout>
+
+```
+- Your layout need to be wrapped into StickersKeyboardLayout, for handling keyboard visibility changes.
+- Your content need to be placed in a ReleativeLayout near frame for stickersFragment
+- You need to use BadgedStickersButton as button for showing and hiding stickers keyboard.
+
+Then, at your activity, you need to do next steps
+- Create StickersFragment instance and place it to frame
+```Android
+	stickersFragment = new StickersFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame, stickersFragment).commit();
+```
+- Create StickersKeyboardController and pass necessary items
+```Android
+stickersKeyboardController = StickersKeyboardController.Builder.create(this)
+                .setStickersKeyboardLayout(stickersLayout) // parent layout
+                .setStickersFragment(stickersFragment) // stickers fragment
+                .setStickersFrame(stickersFrame) // frame for stickers
+                .setContentContainer(chatContentGroup) // your content layout
+                .setStickersButton(stickerButton) // stickers button
+                .setChatEdit(editMessage) // edit text from chat
+                .build();
+```
+- Add functionality for hiding stickers keyboard
+```Android
+@Override
+public void onBackPressed() {
+		if (!stickersKeyboardController.hideStickersKeyboard()) {
+				super.onBackPressed();
+		}
 }
 ```
 
-Then you only need to show fragment. See example with best practice.
+- If you want listen visibility changes of keyboards(soft and stickers), you can add own listener
+```Android
+stickersKeyboardController.setKeyboardVisibilityChangeListener(new StickersKeyboardController.KeyboardVisibilityChangeListener() {
+		@Override
+		public void onTextKeyboardVisibilityChanged(boolean isVisible) {
+				// your code
+		}
+
+		@Override
+		public void onStickersKeyboardVisibilityChanged(boolean isVisible) {
+			// your code
+		}
+});
+```
+
+If you wan to hide soft keyboard, you can use KeyboardUtils
+```Android
+	KeyboardUtils.hideKeyboard(yourContext, someView);
+```
 
 ### Sending stickers
 
@@ -89,14 +167,15 @@ To send stickers you need to set listener and handle results
 ```android
 // create listener
 private OnStickerSelectedListener stickerSelectedListener = new OnStickerSelectedListener() {
-    @Override
-    public void onStickerSelected(String code) {
-        if (StickersManager.isSticker(code)) {
-	        // send message
-        } else {
-            // append emoji to your edittext
-        }
-    }
+		@Override
+		public void onStickerSelected(String code) {
+				// send message
+		}
+
+		@Override
+		public void onEmojiSelected(String emoji) {
+				// append emoji to edit
+		}
 };
 // set listener to your stickers fragment
 stickersFragment.setOnStickerSelectedListener(stickerSelectedListener)
@@ -213,7 +292,7 @@ StickersManager.setUserSubscribed(true);
 
 ## GCM Support
 
-You have an ability to add push notifications to sdk. This is necessary, when you change content(add or remove packs) or want to promote some pack. There are two ways - use GcmIntegration module or use own notification system
+You have an ability to add push notifications to sdk. There are two ways - use GcmIntegration module or use own notification system
 
 ### GCM integration module
 
@@ -245,9 +324,57 @@ Follow [this link](https://developers.google.com/mobile/add) and setup your appl
 ![store gcm key](static/storeKey.png)
 
 - From previous step, receive sender id and set it to GcmManager at Application class
-```android
-GcmManager.setGcmSenderId(mContext, "86472317986");
+```Android
+GcmManager.setGcmSenderId(mContext, "YOUR SENDER ID");
 ```
+- Implement NotificationManager, where need to define start intent for notification and icons.
+	For pre KitKat version, we use color notification icon and monochrome(black and white) for others.
+
+```Android
+public class PushNotificationManager extends vc908.stickerpipe.gcmintegration.NotificationManager {
+
+    @Override
+    public int getColorNotificationIcon() {
+        return R.drawable.ic_launcher;
+    }
+
+    @Override
+    public int getBwNotificationIcon() {
+        return R.drawable.ic_notification;
+    }
+
+    @NonNull
+    @Override
+    public Intent createNotificationIntent(Context context) {
+        return new Intent(context, MainActivity.class);
+    }
+}
+```
+- Set this manager at Application class
+```Android
+GcmManager.setPushNotificationManager(new PushNotificationManager());
+```
+- Add processing of intent at your activity class
+
+```Android
+	@Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ...
+        checkIntent(getIntent());
+    }
+	@Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        checkIntent(intent);
+    }
+
+	private void checkIntent(Intent intent) {
+		NotificationManager.processIntent(this, intent, stickersKeyboardController));
+	}
+```
+
+For better push handling, we recommend to set android:launchMode="singleInstance" to your activity.		
 
 ### Own GCM implementation
 
@@ -256,40 +383,17 @@ If you have own GCM implementation, follow next steps
 - Go to your [admin panel](stickerpipe.com/cp), press "Manage"  and store your GCM API key
 - Set sender id to GcmManager at Application class   
 ```android
-GcmManager.setGcmSenderId(mContext, "86472317986");
+GcmManager.setGcmSenderId(mContext, "YOUR SENDER ID");
 ```
 - When you receive GCM token, set it to SDK
 ```android
 StickersManager.sendGcmToken("GCM TOKEN");
 ```
-- When you receive notification, check it for stickers data and process it with SDK if need
+- When you receive notification, try to and process it with GcmManager first
 ```android
-if(EventsManager.isStickersData(bundleData)){
-            EventsManager.processPush(mContext, bundleData);
-        } else {
-            // you own processing
-        }
-```
-
-### Custom events
-
-You can call events without gcm notifications
-- When you need notify sdk that content need to be updated   
-```android
-EventsManager.updateContent();
-```
-- When you need to show notification, which opens pack info   
-```android
-EventsManager.showPackNotification(mContext, "Notification title", "Notification text", "packName");
-```
-
-### Notification icon
-
-Pack notifications use default icon. You can set your own icon using next code   
-```xml
-        <meta-data
-            android:name="vc908.stickerfactory.notification_icon"
-            android:resource="@drawable/ic_your_icon"/>
+if(!GcmManager.processPush(this, data)){
+	// its not stickerpipe push, implement own processing
+}
 ```
 
 ## Customization
@@ -378,12 +482,12 @@ If you are using TabLayout from design library, check this [issue](https://code.
 ## Credits
 
 
-908 Inc.
+Stickerpipe.com
 
 ## Contact
 
 
-mail@908.vc
+i@stickerpipe.com
 
 ## License
 

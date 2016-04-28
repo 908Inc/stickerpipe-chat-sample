@@ -1,4 +1,4 @@
-<vc908.stickerfactory.ui.view.KeyboardHandleRelativeLayout
+<vc908.stickerfactory.ui.view.StickersKeyboardLayout
     android:id="@+id/sizeNotifierLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -78,22 +78,6 @@
                 android:background="?android:attr/selectableItemBackground"/>
 
         </RelativeLayout>
-
-        <TextView
-            android:id="@+id/try_stickers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/material_16"
-            android:layout_marginBottom="@dimen/material_8"
-            android:background="@drawable/try_stickers_bg"
-            android:paddingBottom="@dimen/material_8"
-            android:paddingLeft="@dimen/material_16"
-            android:paddingRight="@dimen/material_16"
-            android:paddingTop="@dimen/material_8"
-            android:text="@string/try_stickers"
-            android:textColor="@android:color/white"
-            android:layout_above="@+id/sender_section"
-            android:visibility="gone"/>
     </RelativeLayout>
 
     <FrameLayout
@@ -102,4 +86,4 @@
         android:layout_height="240dp"
         android:layout_alignParentBottom="true"
         android:visibility="gone"/>
-</vc908.stickerfactory.ui.view.KeyboardHandleRelativeLayout>
+</vc908.stickerfactory.ui.view.StickersKeyboardLayout>

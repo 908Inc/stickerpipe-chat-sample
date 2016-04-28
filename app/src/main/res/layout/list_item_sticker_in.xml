@@ -11,7 +11,7 @@
         android:id="@+id/avatar"
         android:layout_width="@dimen/avatar_size"
         android:layout_height="@dimen/avatar_size"
-        android:src="@drawable/dad_ava"/>
+        android:src="@drawable/userpic"/>
 
     <ImageView
         android:id="@+id/chat_item_sticker"
