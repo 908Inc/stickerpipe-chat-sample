@@ -1,3 +1,8 @@
+## Migration guide from pre 0.11.0 version
+- Change KeyboardHandleLayout to StickersKeyboardLayout
+- Create instance of StickersKeyboardController and pass all necessary arguments(see [Showing stickers fragment](#showing-stickers-fragment))
+- Now you can remove all clicks handlings from stickers buttons, icon changing, keyboard size listeners, etc. All this work will be doing by controller.
+
 ## Table of contents
 
 - [About](#about)
@@ -305,7 +310,7 @@ If your application don't have gcm functionality you need to follow next steps
     }
 ```   
 
-- Add reciver at your Manifest file and replace yor_package_name with your real package name
+- Add receiver at your Manifest file and replace yor_package_name with your real package name
 ```android
  <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
@@ -327,8 +332,7 @@ Follow [this link](https://developers.google.com/mobile/add) and setup your appl
 ```Android
 GcmManager.setGcmSenderId(mContext, "YOUR SENDER ID");
 ```
-- Implement NotificationManager, where need to define start intent for notification and icons.
-	For pre KitKat version, we use color notification icon and monochrome(black and white) for others.
+- Implement NotificationManager, where need to define start intent for notification and icons. For pre KitKat version, we use color notification icon and monochrome(black and white) for others.
 
 ```Android
 public class PushNotificationManager extends vc908.stickerpipe.gcmintegration.NotificationManager {
@@ -385,11 +389,37 @@ If you have own GCM implementation, follow next steps
 ```android
 GcmManager.setGcmSenderId(mContext, "YOUR SENDER ID");
 ```
+- Implement NotificationManager, where need to define start intent for notification and icons. For pre KitKat version, we use color notification icon and monochrome(black and white) for others.
+
+```Android
+public class PushNotificationManager extends vc908.stickerpipe.gcmintegration.NotificationManager {
+
+    @Override
+    public int getColorNotificationIcon() {
+        return R.drawable.ic_launcher;
+    }
+
+    @Override
+    public int getBwNotificationIcon() {
+        return R.drawable.ic_notification;
+    }
+
+    @NonNull
+    @Override
+    public Intent createNotificationIntent(Context context) {
+        return new Intent(context, MainActivity.class);
+    }
+}
+```
+- Set this manager at Application class
+```Android
+GcmManager.setPushNotificationManager(new PushNotificationManager());
+```
 - When you receive GCM token, set it to SDK
 ```android
 StickersManager.sendGcmToken("GCM TOKEN");
 ```
-- When you receive notification, try to and process it with GcmManager first
+- When you receive notification, try to process it with GcmManager first
 ```android
 if(!GcmManager.processPush(this, data)){
 	// its not stickerpipe push, implement own processing
@@ -400,7 +430,7 @@ if(!GcmManager.processPush(this, data)){
 
 ### Colors
 
-You can customize all colors by overriding values with "sp_" prefix. This is next available values
+You can customize all colors by overriding values with "sp_" prefix.
 ```xml
 <color name="sp_primary">#5E7A87</color>
 <color name="sp_primary_dark">#455A64</color>
@@ -469,7 +499,7 @@ Stickerpipe SDK support English language. If your application use another langua
 ## Statistics
 
 ### Messages and stickers count
-To count the number of sendings messages and stickers, you need call an analysts method onUserMessageSent (boolean)
+To count the number of sending messages and stickers, you need call an analysts method onUserMessageSent (boolean)
 ```Android
 AnalyticsManager.getInstance().onUserMessageSent(StickersManager.isSticker(message));
 ```
@@ -482,7 +512,7 @@ If you are using TabLayout from design library, check this [issue](https://code.
 ## Credits
 
 
-Stickerpipe.com
+Stickerpipe
 
 ## Contact
 
