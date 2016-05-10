@@ -15,6 +15,9 @@
 	- [Showing pack info](#showing-pack-info)
 	- [Showing new packs marker](#showing-new-packs-marker)
 - [Users](#users)
+- [Search](#search)
+	- [Search tab](#search-tab)
+	- [Inline search](#inline-search)
 - [Selling content](#selling-content)
 	- [InApp purchases](#inapp-purchases)
 	- [Internal currency](#internal-currency)
@@ -244,6 +247,39 @@ userData.put(User.KEY_AGE, String.valueOf(30));
 
 StickersManager.setUser("some unique user id", userData);
 ```
+## Search
+
+Your users have an ability to search stickers by keywords using search tab or inline search.
+Make sure, you are using StickersKeyboardController for managing your layouts for better integration.
+
+### Search tab
+
+By default, search tab is enabled in sdk, but you can disable this tab by passing flag at your application class
+```Android
+StickersManager.isSearchTabEnabled = false;
+```
+
+### Inline search
+
+To add inline stickers search to your chat, follow next steps
+
+- Place RecyclerView above your chat Edittext
+```xml
+<android.support.v7.widget.RecyclerView
+            android:id="@+id/suggests_list"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_suggest_container_height"
+            android:layout_above="@+id/sender_section"/>
+```
+- Pass this view to StickersKeyboardController at your Activity
+``` Android
+StickersKeyboardController.Builder.create(this)
+...
+.setSuggestContainer(suggestsList)
+.build();
+```
+
+<img src="static/inline.png" width="300">
 
 ## Selling content
 You have an ability to sell content via your internal currency, inApp purchases or provide via subscription model. We use price points for selling our content. Currently we have A, B and C price points. We use A to mark FREE content and B/C for the paid content. Basically B is equal to 0.99$ and C equal to 1.99$ but the actual price can be vary depend on the countries and others circumstances.

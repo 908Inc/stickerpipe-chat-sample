@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -29,7 +30,6 @@ import vc908.stickerfactory.ui.fragment.StickersFragment;
 import vc908.stickerfactory.ui.view.BadgedStickersButton;
 import vc908.stickerfactory.ui.view.StickersKeyboardLayout;
 import vc908.stickerfactory.utils.CompatUtils;
-import vc908.stickerfactory.utils.KeyboardUtils;
 import vc908.stickerpipe.gcmintegration.NotificationManager;
 
 
@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 addMessage(message, false, System.currentTimeMillis());
             }
         });
+
         adapter = new ChatAdapter();
         list.setAdapter(adapter);
         StickersFragment stickersFragment = (StickersFragment) getSupportFragmentManager().findFragmentById(R.id.frame);
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         BadgedStickersButton stickerButton = ((BadgedStickersButton) findViewById(R.id.stickers_btn));
         View stickersFrame = findViewById(R.id.frame);
         View chatContentGroup = findViewById(R.id.chat_content);
-
+        RecyclerView suggestsList = (RecyclerView) findViewById(R.id.suggests_list);
         StickersKeyboardLayout stickersLayout = (StickersKeyboardLayout) findViewById(R.id.sizeNotifierLayout);
         stickersKeyboardController = StickersKeyboardController.Builder.create(this)
                 .setStickersKeyboardLayout(stickersLayout)
@@ -85,7 +86,9 @@ public class MainActivity extends AppCompatActivity {
                 .setContentContainer(chatContentGroup)
                 .setStickersButton(stickerButton)
                 .setChatEdit(editMessage)
+                .setSuggestContainer(suggestsList)
                 .build();
+
         stickersKeyboardController.setKeyboardVisibilityChangeListener(new StickersKeyboardController.KeyboardVisibilityChangeListener() {
             @Override
             public void onTextKeyboardVisibilityChanged(boolean isVisible) {
@@ -122,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onStickerSelected(String code) {
             addMessage(code, false, System.currentTimeMillis());
-            KeyboardUtils.hideKeyboard(MainActivity.this, editMessage);
         }
 
         @Override
@@ -141,9 +143,9 @@ public class MainActivity extends AppCompatActivity {
         } else {
             items.add(new ChatItem(isIn ? ChatItem.ChatItemType.MESSAGE_IN : ChatItem.ChatItemType.MESSAGE_OUT, message, time));
             StickersManager.onUserMessageSent(false);
-        }
-        if (!isIn) {
-            editMessage.setText("");
+            if (!isIn) {
+                editMessage.setText("");
+            }
         }
         updateList(!isIn);
     }
