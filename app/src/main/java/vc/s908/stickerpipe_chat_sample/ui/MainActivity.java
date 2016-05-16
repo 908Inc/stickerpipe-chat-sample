@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         View chatContentGroup = findViewById(R.id.chat_content);
         RecyclerView suggestsList = (RecyclerView) findViewById(R.id.suggests_list);
         StickersKeyboardLayout stickersLayout = (StickersKeyboardLayout) findViewById(R.id.sizeNotifierLayout);
-        stickersKeyboardController = StickersKeyboardController.Builder.create(this)
+        stickersKeyboardController = new StickersKeyboardController.Builder(this)
                 .setStickersKeyboardLayout(stickersLayout)
                 .setStickersFragment(stickersFragment)
                 .setStickersFrame(stickersFrame)

@@ -130,7 +130,7 @@ Then, at your activity, you need to do next steps
 ```
 - Create StickersKeyboardController and pass necessary items
 ```Android
-stickersKeyboardController = StickersKeyboardController.Builder.create(this)
+stickersKeyboardController = new StickersKeyboardController.Builder(this)
                 .setStickersKeyboardLayout(stickersLayout) // parent layout
                 .setStickersFragment(stickersFragment) // stickers fragment
                 .setStickersFrame(stickersFrame) // frame for stickers
@@ -256,7 +256,7 @@ Make sure, you are using StickersKeyboardController for managing your layouts fo
 
 By default, search tab is enabled in sdk, but you can disable this tab by passing flag at your application class
 ```Android
-StickersManager.isSearchTabEnabled = false;
+StickersManager.setIsSearchTabEnabled(false);
 ```
 
 ### Inline search

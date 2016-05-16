@@ -26,13 +26,15 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
 }
+def stickerpipeSdkVersion = '0.11.4'
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile('vc908.stickers:stickerfactory:0.11.1') {
+    compile("vc908.stickers:stickerfactory:$stickerpipeSdkVersion") {
         transitive = true;
     }
-    compile('vc908.stickers:gcmintegration:0.11.1') {
+
+    compile("vc908.stickers:gcmintegration:$stickerpipeSdkVersion") {
         transitive = true;
     }
 }
