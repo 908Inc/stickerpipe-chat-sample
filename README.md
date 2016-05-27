@@ -26,6 +26,7 @@
 	- [GCM integration module](#gcm-integration-module)
 	- [Own GCM implementation](#own-gcm-implementation)
 - [Customization](#customization)
+	- [Emoji](#emoji)
 	- [Colors](#colors)
 	- [Languages](#languages)
 - [Statistics](#statistics)
@@ -463,6 +464,25 @@ if(!GcmManager.processPush(this, data)){
 ```
 
 ## Customization
+
+### Emoji
+
+You can replace native emoji with your custom images. You need to pass map of your codes with assosiated image name, wich can be placed at drawable or assets folders.
+As emoji code, you can use utf8 symbols or your custom string. This code will be return to you at callback.
+As param, you need to put resource location - DRAWABLE or ASSETS, and assets folder if need
+```Android
+// In your application after initializing sdk
+LinkedHashMap<String, String> map = new LinkedHashMap<>();
+map.put(Emoji.newString(0x1f496), "emoji_1f496"); // use emoji code
+map.put("your_custom_string", "emoji_1f601"); // custom string as code
+...
+EmojiSettingsBuilder builder = new EmojiSettingsBuilder()
+       .setCustomEmojiMap(map)
+       .setResourceLocation(EmojiSettingsBuilder.EmojiResourceLocation.DRAWABLE); // or ASSETS
+       // .setAssetsFolder("/your/asset/folder") for assets if need
+       
+StickersManager.setEmojiSettingsBuilder(builder);
+```
 
 ### Colors
 
