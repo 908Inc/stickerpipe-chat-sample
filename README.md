@@ -14,6 +14,7 @@
 	- [Displaying stickers](#displaying-stickers)
 	- [Showing pack info](#showing-pack-info)
 	- [Showing new packs marker](#showing-new-packs-marker)
+	- [Clearing cache](#clearing-cache)
 - [Users](#users)
 - [Search](#search)
 	- [Search tab](#search-tab)
@@ -227,9 +228,15 @@ You can use BadgedStickersButton to indicate to user, that he has a new content
 ```
 ![markers](static/marker.png)  
 
+### Clearing cache
+You have an ability to clear all cached sticker from internal storage. It will clear recently used stickers to
+```Android
+StickersManage.clearCache()
+```
+
 ## Users
 
-When you know your user id, set it to sdk   
+User id required, and need for retrieving stickers packs. Set it to sdk, when you receive user id.
 
 ```Android
 StickersManager.setUserID("some unique user id");
@@ -238,6 +245,10 @@ This add ability to make purchases, manage their packs and don't lose them after
 You can obfuscate user id before setting it to sdk using md5 method from our Utils class
 ```Android
 StickersManager.setUserID(vc908.stickerfactory.utils.Utils.md5("some unique user id, email, etc"));
+```
+If you system does not operate with user id, you can use device id instead
+```Android
+StickersManager.setUser(vc908.stickerfactory.utils.Utils.getDeviceId(this);
 ```
 
 Also you can send user related data, such as age or gender
@@ -523,6 +534,10 @@ You can customize all colors by overriding values with "sp_" prefix.
 <color name="sp_pack_info_message_text">@color/sp_primary</color>
 <color name="sp_pack_info_message_image_filter">@color/sp_primary</color>
 <color name="sp_pack_info_bg">@android:color/white</color>
+
+<color name="sp_search_fragment_icons">#616161</color>
+<color name="sp_search_fragment_text">#616161</color>
+<color name="sp_search_fragment_text_hint">#a8a8a8</color>
 ```
 
 ### Languages
