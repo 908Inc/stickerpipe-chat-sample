@@ -26,7 +26,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
 }
-def stickerpipeSdkVersion = '0.11.7'
+def stickerpipeSdkVersion = '0.11.9'
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
