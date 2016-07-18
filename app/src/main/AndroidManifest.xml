@@ -1,15 +1,22 @@
 <manifest package="vc.s908.stickerpipe_chat_sample"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application android:name=".App"
-                 android:allowBackup="true"
-                 android:icon="@drawable/ic_launcher"
-                 android:label="@string/app_name"
-                 android:theme="@style/AppTheme">
+    <permission
+        android:name="vc.s908.stickerpipe_chat_sample.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature"/>
+
+    <uses-permission android:name="vc.s908.stickerpipe_chat_sample.permission.JPUSH_MESSAGE"/>
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
         <activity
-                android:name=".ui.MainActivity"
-                android:label="@string/app_name"
-                android:launchMode="singleInstance">
+            android:name=".ui.MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -17,21 +24,86 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.ShopActivity"/>
+
         <provider
-                android:name="vc908.stickerfactory.provider.StickersProvider"
-                android:authorities="vc.s908.stickerpipe_chat_sample.stickersProvider"
-                android:exported="false"/>
+            android:name="vc908.stickerfactory.provider.StickersProvider"
+            android:authorities="vc.s908.stickerpipe_chat_sample.stickersProvider"
+            android:exported="false"/>
 
         <receiver
-                android:name="com.google.android.gms.gcm.GcmReceiver"
-                android:exported="true"
-                android:permission="com.google.android.c2dm.permission.SEND">
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+
                 <category android:name="vc.s908.stickerpipe_chat_sample"/>
             </intent-filter>
         </receiver>
+
+        <!-- JPUSH -->
+
+        <service
+            android:name="cn.jpush.android.service.DaemonService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.DaemonService"/>
+                <category android:name="vc.s908.stickerpipe_chat_sample"/>
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name="cn.jpush.android.service.PushReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter android:priority="1000">
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/>
+                <category android:name="vc.s908.stickerpipe_chat_sample"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+
+                <data android:scheme="package"/>
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="cn.jpush.android.ui.PushActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="cn.jpush.android.ui.PushActivity"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="vc.s908.stickerpipe_chat_sample"/>
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name="vc908.stickerpipe.jpushintegration.JpushReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTRATION"/>
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED"/>
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED"/>
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED"/>
+                <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK"/>
+                <action android:name="cn.jpush.android.intent.CONNECTION"/>
+
+                <category android:name="vc.s908.stickerpipe_chat_sample"/>
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="4b4d2da4ffe25827221fa54b"/>
 
 
     </application>

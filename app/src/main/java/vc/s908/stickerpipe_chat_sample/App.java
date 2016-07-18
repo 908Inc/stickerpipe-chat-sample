@@ -11,6 +11,7 @@ import vc908.stickerfactory.User;
 import vc908.stickerfactory.billing.Prices;
 import vc908.stickerfactory.utils.Utils;
 import vc908.stickerpipe.gcmintegration.GcmManager;
+import vc908.stickerpipe.jpushintegration.JpushManager;
 
 /**
  * Created by Dmitry Nezhydenko
@@ -44,5 +45,6 @@ public class App extends Application {
         );
         // licence key for inapp purchases
         StickersManager.setLicenseKey("YOUR LICENCE KEY");
+        JpushManager.init(this);
     }
 }

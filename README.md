@@ -23,9 +23,10 @@
 	- [InApp purchases](#inapp-purchases)
 	- [Internal currency](#internal-currency)
 	- [Subscription model](#subscription-model)
-- [GCM Support](#gcm-support)
+- [Push Messages Support](#push-messages-support)
 	- [GCM integration module](#gcm-integration-module)
 	- [Own GCM implementation](#own-gcm-implementation)
+	- [Aurora push notifications (JPush)](#aurora-push-notifications-jpush)
 - [Customization](#customization)
 	- [Emoji](#emoji)
 	- [Colors](#colors)
@@ -343,7 +344,7 @@ If you want to use subscription model, you need to set subscription flag to sdk,
 StickersManager.setUserSubscribed(true);
 ```
 
-## GCM Support
+## Push Messages Support
 
 You have an ability to add push notifications to sdk. There are two ways - use GcmIntegration module or use own notification system
 
@@ -474,6 +475,103 @@ if(!GcmManager.processPush(this, data)){
 }
 ```
 
+### Aurora push notifications (JPush)
+When user device has no google play services, you have an ability to send push notifications via Aurora push. This integration will work only on devices without installed google play services. Make sure, that you implemented PushNotificationManager from previous steps for GCM support. Then follow next steps
+
+- Add dependency at your build file. List of available versions you can find [here](http://maven.stickerpipe.com/artifactory/stickerfactory/vc908/stickers/jpushintegration/)
+```android
+    compile('vc908.stickers:jpushintegration:x.x.x@aar'){
+        transitive = true;
+    }
+```   
+- Add to your manifest next items and replace YOUR-PACKAGE placeholder with your real package name
+```Android
+    <permission
+        android:name="YOUR-PACKAGE.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature"/>
+
+    <uses-permission android:name="YOUR-PACKAGE.permission.JPUSH_MESSAGE"/>
+
+    <application
+        ...
+       >
+
+            <service
+                android:name="cn.jpush.android.service.DaemonService"
+                android:enabled="true"
+                android:exported="true">
+                <intent-filter>
+                    <action android:name="cn.jpush.android.intent.DaemonService"/>
+                    <category android:name="YOUR-PACKAGE"/>
+                </intent-filter>
+            </service>
+
+            <receiver
+                android:name="cn.jpush.android.service.PushReceiver"
+                android:enabled="true"
+                android:exported="false">
+                <intent-filter android:priority="1000">
+                    <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/>
+                    <category android:name="YOUR-PACKAGE"/>
+                </intent-filter>
+                <intent-filter>
+                    <action android:name="android.intent.action.USER_PRESENT"/>
+                    <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                </intent-filter>
+                <intent-filter>
+                    <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                    <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+
+                    <data android:scheme="package"/>
+                </intent-filter>
+            </receiver>
+
+            <activity
+                android:name="cn.jpush.android.ui.PushActivity"
+                android:configChanges="orientation|keyboardHidden"
+                android:exported="false">
+                <intent-filter>
+                    <action android:name="cn.jpush.android.ui.PushActivity"/>
+
+                    <category android:name="android.intent.category.DEFAULT"/>
+                    <category android:name="YOUR-PACKAGE"/>
+                </intent-filter>
+            </activity>
+
+            <receiver
+                android:name="vc908.stickerpipe.jpushintegration.JpushReceiver"
+                android:enabled="true">
+                <intent-filter>
+                    <action android:name="cn.jpush.android.intent.REGISTRATION"/>
+                    <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED"/>
+                    <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED"/>
+                    <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED"/>
+                    <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK"/>
+                    <action android:name="cn.jpush.android.intent.CONNECTION"/>
+
+                    <category android:name="YOUR-PACKAGE"/>
+                </intent-filter>
+            </receiver>
+
+    </application>
+```
+
+- Register your application at [Aurora push service](https://www.jiguang.cn/), obtain AppKey and Secret Master
+- Add meta data to your manifest at application section and replace YOUR-APP-KEY with your value
+```Android
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="YOUR-APP-KEY"/>
+```
+- Provide your AppKey and Secret Master at Stickerpipe notification settings section
+
+![markers](static/jpushsettings.png)
+
+- Initialize JpushManager at your application
+```Android
+        JpushManager.init(this);
+```
+
 ## Customization
 
 ### Emoji
@@ -491,7 +589,7 @@ EmojiSettingsBuilder builder = new EmojiSettingsBuilder()
        .setCustomEmojiMap(map)
        .setResourceLocation(EmojiSettingsBuilder.EmojiResourceLocation.DRAWABLE); // or ASSETS
        // .setAssetsFolder("/your/asset/folder") for assets if need
-       
+
 StickersManager.setEmojiSettingsBuilder(builder);
 ```
 
