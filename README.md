@@ -9,13 +9,13 @@
 - [Installation](#installation)
 - [Usage](#usage)
 	- [Initializing](#initializing)
+	- [Users](#users)
 	- [Showing stickers fragment](#showing-stickers-fragment)
 	- [Sending stickers](#sending-stickers)
 	- [Displaying stickers](#displaying-stickers)
 	- [Showing pack info](#showing-pack-info)
 	- [Showing new packs marker](#showing-new-packs-marker)
 	- [Clearing cache](#clearing-cache)
-- [Users](#users)
 - [Search](#search)
 	- [Search tab](#search-tab)
 	- [Inline search](#inline-search)
@@ -76,6 +76,33 @@ Initialize library at your Application onCreate() method
 StickersManager.initialize(“YOUR-API-KEY", this);
 ```
 You can get your own API Key on http://stickerpipe.com to have customized packs set.
+
+
+### Users
+
+User id required, and need for retrieving stickers packs. Set it to sdk, when you receive user id.
+
+```Android
+StickersManager.setUserID("some unique user id");
+```
+This add ability to make purchases, manage their packs and don't lose them after reinstalling.  
+You can obfuscate user id before setting it to sdk using md5 method from our Utils class
+```Android
+StickersManager.setUserID(vc908.stickerfactory.utils.Utils.md5("some unique user id, email, etc"));
+```
+If you system does not operate with user id, you can use device id instead
+```Android
+StickersManager.setUser(vc908.stickerfactory.utils.Utils.getDeviceId(this);
+```
+
+Also you can send user related data, such as age or gender
+```Android
+Map<String, String> userData = new HashMap<>();
+userData.put(User.KEY_GENDER, User.GENDER_MALE);
+userData.put(User.KEY_AGE, String.valueOf(30));
+
+StickersManager.setUser("some unique user id", userData);
+```
 
 ### Showing stickers fragment
 We created some additional classes, to help you integrate stickers keyboard naturally to your app.
@@ -231,31 +258,6 @@ You have an ability to clear all cached sticker from internal storage. It will c
 StickersManage.clearCache()
 ```
 
-## Users
-
-User id required, and need for retrieving stickers packs. Set it to sdk, when you receive user id.
-
-```Android
-StickersManager.setUserID("some unique user id");
-```
-This add ability to make purchases, manage their packs and don't lose them after reinstalling.  
-You can obfuscate user id before setting it to sdk using md5 method from our Utils class
-```Android
-StickersManager.setUserID(vc908.stickerfactory.utils.Utils.md5("some unique user id, email, etc"));
-```
-If you system does not operate with user id, you can use device id instead
-```Android
-StickersManager.setUser(vc908.stickerfactory.utils.Utils.getDeviceId(this);
-```
-
-Also you can send user related data, such as age or gender
-```Android
-Map<String, String> userData = new HashMap<>();
-userData.put(User.KEY_GENDER, User.GENDER_MALE);
-userData.put(User.KEY_AGE, String.valueOf(30));
-
-StickersManager.setUser("some unique user id", userData);
-```
 ## Search
 
 Your users have an ability to search stickers by keywords using search tab or inline search.
