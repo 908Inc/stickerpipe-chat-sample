@@ -19,10 +19,6 @@
 - [Search](#search)
 	- [Search tab](#search-tab)
 	- [Inline search](#inline-search)
-- [Selling content](#selling-content)
-	- [InApp purchases](#inapp-purchases)
-	- [Internal currency](#internal-currency)
-	- [Subscription model](#subscription-model)
 - [Push Messages Support](#push-messages-support)
 	- [GCM integration module](#gcm-integration-module)
 	- [Own GCM implementation](#own-gcm-implementation)
@@ -293,56 +289,6 @@ StickersKeyboardController.Builder.create(this)
 ```
 
 <img src="static/inline.png" width="300">
-
-## Selling content
-You have an ability to sell content via your internal currency, inApp purchases or provide via subscription model. We use price points for selling our content. Currently we have A, B and C price points. We use A to mark FREE content and B/C for the paid content. Basically B is equal to 0.99$ and C equal to 1.99$ but the actual price can be vary depend on the countries and others circumstances.
-
-<img src="static/shop.png" width="300">
-
-### InApp purchases
-To sell content via inApp purchases, you need to create products for B and C content at your developer console and then set SKU ids to sdk
-```Android
-StickersManager.setPrices(new Prices()
-                .setSkuB("pack_b")
-                .setSkuC("pack_c")
-				);
-```
-### Internal currency
-To sell content via internal currency, you need to set your prices to sdk. This price labels will be showed at stickers shop, values you will received at callback from shop.
-```Android
-StickersManager.setPrices(new Prices()
-                .setPricePointB("$0.99", 0.99f)
-                .setPricePointC("$1.99", 1.99f)
-                );
-```
-Next you need to extend ShopWebViewActivity and implement onPurchase method. At this method you will receive all nececcary information.
-```Android
-public class ShopActivity extends vc908.stickerfactory.ui.activity.ShopWebViewActivity {
-    @Override
-    protected void onPurchase(String packTitle, final String packName, PricePoint pricePoint) {
-        // Your charging logic
-    }
-}
-```
-After successful or failed(canceled) purchasing, you need to call necessary methods
-```Android
-// Successfully purchased pack
- StickersManager.onPackPurchased(packName);
-
- // Canceled of failed purchasing
- // This method from ShopWebViewActivity
-  onPurchaseFail();
-```
-At last, you need to set your custom class to sdk
-```Android
-StickersManager.setShopClass(ShopActivity.class);
-```
-
-### Subscription model
-If you want to use subscription model, you need to set subscription flag to sdk, when user became or ceased to be subscriber(or premium user). After this, content with B price point be available for free for subscribers(premium users)
-```Android
-StickersManager.setUserSubscribed(true);
-```
 
 ## Push Messages Support
 
