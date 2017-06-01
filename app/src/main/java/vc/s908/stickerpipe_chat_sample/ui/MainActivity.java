@@ -57,12 +57,9 @@ public class MainActivity extends AppCompatActivity {
         editMessage = (EditText) findViewById(R.id.editText);
         ImageView buttonSend = (ImageView) findViewById(R.id.send_btn);
         buttonSend.setColorFilter(ContextCompat.getColor(this, R.color.primary));
-        buttonSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String message = editMessage.getText().toString();
-                addMessage(message, false, System.currentTimeMillis());
-            }
+        buttonSend.setOnClickListener(v -> {
+            String message = editMessage.getText().toString();
+            addMessage(message, false, System.currentTimeMillis());
         });
 
         adapter = new ChatAdapter();
@@ -319,12 +316,7 @@ public class MainActivity extends AppCompatActivity {
             vh.timeView = (TextView) view.findViewById(R.id.chat_item_time);
             vh.avatar = view.findViewById(R.id.avatar);
             view.setTag(vh);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    StickersManager.showPackInfoByCode(MainActivity.this, vh.stickerCode);
-                }
-            });
+            view.setOnClickListener(v -> StickersManager.showPackInfoByCode(MainActivity.this, vh.stickerCode));
             return view;
         }
 

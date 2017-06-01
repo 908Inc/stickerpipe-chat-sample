@@ -5,13 +5,13 @@ repositories {
 }
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 25
+    buildToolsVersion '25.0.3'
 
     defaultConfig {
         applicationId "vc.s908.stickerpipe_chat_sample"
         minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
     }
@@ -22,14 +22,13 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-def stickerpipeSdkVersion = '0.13.6'
+def stickerpipeSdkVersion = '0.15.1'
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile("vc908.stickers:stickerfactory:$stickerpipeSdkVersion") {
         transitive = true;
     }
